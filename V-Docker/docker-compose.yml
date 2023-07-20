@@ -6,11 +6,12 @@ services:
     container_name: v-proxy
     restart: always
     ports:
-      - "81:81"
+      - "80:80"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./proxy/conf.d/custom.conf:/etc/nginx/conf.d/custom.conf
-      - ./proxy/hosts:/etc/nginx/hosts
+      - ./proxy/conf.d/api.conf:/etc/nginx/conf.d/api.conf
+      - ./proxy/conf.d/console.conf:/etc/nginx/conf.d/console.conf
     networks:
       v-net:
         ipv4_address: 172.14.1.2
@@ -53,16 +54,14 @@ services:
     build: ../V-Laravel-Api
     image: v-laravel-api
     container_name: v-laravel-api
-    depends_on:
-      v-mysql:
-        condition: service_healthy
+#    depends_on:
+#      v-mysql:
+#        condition: service_healthy
     networks:
       v-net:
         ipv4_address: 172.14.1.4
     volumes:
       - ../V-Laravel-Api:/var/www/html
-    ports:
-      - "82:82"
     hostname: api
     environment:
       MYSQL_ROOT_PASSWORD: 123456
