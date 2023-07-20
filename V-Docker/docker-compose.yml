@@ -86,7 +86,6 @@ services:
       - ./supervisor/conf.d/vue-worker.conf:/etc/supervisor/conf.d/vue-worker.conf
     hostname: console
     environment:
-      NODE_ENV: local
       VIRTUAL_HOST: v-console.local
 
 networks:
