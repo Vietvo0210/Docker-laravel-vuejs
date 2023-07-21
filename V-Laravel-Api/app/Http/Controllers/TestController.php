@@ -101,4 +101,14 @@ class TestController
         }
         return $this->result('');
     }
+
+    public function search(Request $request)
+    {
+        $param = $request->all();
+        $limit = array_key_exists("limit", $param) ? $param["limit"] : 10;
+        if(array_key_exists("name", $param)){
+            return Test::query()->where('name', '=', $param["name"])->limit($limit)->get();
+        }
+        return Test::query()->get();
+    }
 }

@@ -19,10 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix'=>'test'], function () {
-    Route::get('/', [TestController::class, 'index']);
-    Route::get('/{id}', [TestController::class, 'show']);
-    Route::post('/', [TestController::class, 'store']);
-    Route::put('/{id}', [TestController::class, 'update']);
-    Route::delete('/{id}', [TestController::class, 'delete']);
-});
+Route::apiResource('/test', TestController::class);
+Route::get('/search', [TestController::class, 'search']);
