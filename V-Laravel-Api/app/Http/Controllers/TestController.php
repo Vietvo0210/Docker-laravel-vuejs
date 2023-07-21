@@ -22,10 +22,13 @@ class TestController
         ], Response::HTTP_OK);
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $param = $request->all();
         try {
-            $products = Test::all();
+            if(array_key_exists("limit", $param)) {
+                $test = Test::query()->limit((int)$param["limit"])->get();
+            } else $test = Test::query()->get();
         } catch (Exception $e) {
             return response()->json([
                 'data' => [],
@@ -33,7 +36,7 @@ class TestController
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->result($products);
+        return $this->result($test);
     }
 
     public function show($id)
