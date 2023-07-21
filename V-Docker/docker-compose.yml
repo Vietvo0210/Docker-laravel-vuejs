@@ -78,8 +78,6 @@ services:
     networks:
       v-net:
         ipv4_address: 172.14.1.6
-    ports:
-      - "83:8081"
     volumes:
       - ../V-Console:/app
       - ./supervisor/conf.d/vue-worker.conf:/etc/supervisor/conf.d/vue-worker.conf
