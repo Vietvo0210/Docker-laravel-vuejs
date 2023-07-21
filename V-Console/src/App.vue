@@ -22,7 +22,8 @@
       <div :style="{ background: '#fff', padding: '24px', minHeight: '280px' }">Content</div>
     </a-layout-content>
     <a-layout-footer style="text-align: center">
-      Ant Design ©2018 Created by Ant UED
+      {{ count }}
+      <a-button @click="changeValue">Update Value</a-button>
     </a-layout-footer>
   </a-layout>
 </template>
@@ -49,6 +50,16 @@
   background: #141414;
 }
 </style>
-<script>
+<script setup>
 
+import { onMounted, ref } from 'vue'
+
+const count =ref(2);
+
+const changeValue =  () => {
+  count.value++;
+}
+onMounted(() => {
+  console.log(123);
+})
 </script>
