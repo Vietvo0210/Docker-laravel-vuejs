@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\FruitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('/test', TestController::class);
-Route::get('/search', [TestController::class, 'search']);
+Route::apiResource('/fruit', FruitController::class);
+Route::get('/test_search', [TestController::class, 'search']);
+Route::get('/search_fruit', [FruitController::class, 'search']);
