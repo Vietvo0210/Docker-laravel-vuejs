@@ -22,8 +22,9 @@
       <div :style="{ background: '#fff', padding: '24px', minHeight: '280px' }"> {{ list }}</div>
       <span> {{ item }} </span>
     </a-layout-content>
-    <a-layout-footer style="text-align: center" class="flex">
-      <a-button @click="fetchItem">Button</a-button>
+    <a-layout-footer style="text-align: center">
+      <a-button @click="fetchItem">Fetch Item</a-button>
+      <a-button @click="addItem">Add Item</a-button>
     </a-layout-footer>
   </a-layout>
 </template>
@@ -52,21 +53,36 @@
 </style>
 <script setup>
 
-import { onMounted, ref } from 'vue'
-import { getDetail, getIndex, testIndex } from '@/RestApi'
+import { onMounted, ref, watch } from 'vue'
+import { getDetail, getIndex, postData, testApi } from '@/RestApi'
 
 const list = ref([]);
 const item = ref();
+const addSuccessFlag = ref('init');
 
 const fetchItems = async () => {
-  list.value = await getIndex(testIndex)
+  list.value = await getIndex(testApi)
 }
 
 const fetchItem = async () => {
-  item.value = await getDetail(testIndex, 1);
+  item.value = await getDetail(testApi, 1);
+}
+
+const addItem = async () => {
+  const data = {name: "Viet"};
+  if(await postData(testApi, data) === 200){
+    addSuccessFlag.value = 'Success'
+  }
+  else alert('Post Failed!');
 }
 
 onMounted(() => {
   fetchItems();
+})
+
+watch(() => addSuccessFlag.value, effect => {
+  if(effect === 'Success') {
+    fetchItems()
+  }
 })
 </script>
