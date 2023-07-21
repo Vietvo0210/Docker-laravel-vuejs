@@ -1,1 +1,1 @@
-export const TestApi = 'v-api.local/test/'
+export const TestApi = 'http://v-api.local/test'
