@@ -12,6 +12,7 @@ services:
       - ./proxy/conf.d/custom.conf:/etc/nginx/conf.d/custom.conf
       - ./proxy/conf.d/api.conf:/etc/nginx/conf.d/api.conf
       - ./proxy/conf.d/console.conf:/etc/nginx/conf.d/console.conf
+      - ./proxy/conf.d/phpmyadmin.conf:/etc/nginx/conf.d/phpmyadmin.conf
     networks:
       v-net:
         ipv4_address: 172.14.1.2
@@ -38,8 +39,6 @@ services:
       - v-mysql
     external_links:
       - v-mysql:mysql
-    ports:
-      - "85:80"
     environment:
       MYSQL_ROOT_PASSWORD: 123456
       MYSQL_DATABASE: Fruit
