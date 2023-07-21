@@ -20,9 +20,10 @@
         <a-breadcrumb-item>App</a-breadcrumb-item>
       </a-breadcrumb>
       <div :style="{ background: '#fff', padding: '24px', minHeight: '280px' }"> {{ list }}</div>
+      <span> {{ item }} </span>
     </a-layout-content>
     <a-layout-footer style="text-align: center" class="flex">
-      <a-button @click="changeValue">Button</a-button>
+      <a-button @click="fetchItem">Button</a-button>
     </a-layout-footer>
   </a-layout>
 </template>
@@ -52,19 +53,17 @@
 <script setup>
 
 import { onMounted, ref } from 'vue'
-import { TestApi } from '@/constant'
+import { getDetail, getIndex, testIndex } from '@/RestApi'
 
-const count =ref(2);
-const list = ref([])
-
-const changeValue =  () => {
-  count.value++;
-}
+const list = ref([]);
+const item = ref();
 
 const fetchItems = async () => {
-  const res = await fetch(TestApi);
-  const dataArr = await res.json()
-  list.value = dataArr.data
+  list.value = await getIndex(testIndex)
+}
+
+const fetchItem = async () => {
+  item.value = await getDetail(testIndex, 1);
 }
 
 onMounted(() => {
