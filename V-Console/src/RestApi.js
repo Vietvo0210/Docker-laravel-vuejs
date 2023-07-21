@@ -1,5 +1,5 @@
 import axios from 'axios'
-export const testApi = 'http://v-api.local/test'
+export const fruitApi = 'http://v-api.local/fruit'
 
 export const getIndex = (url) => {
   return axios.get(url).then(res => {

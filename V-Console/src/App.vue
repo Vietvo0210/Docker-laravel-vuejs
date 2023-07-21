@@ -54,23 +54,23 @@
 <script setup>
 
 import { onMounted, ref, watch } from 'vue'
-import { getDetail, getIndex, postData, testApi } from '@/RestApi'
+import { getDetail, getIndex, postData, fruitApi } from '@/RestApi'
 
 const list = ref([]);
 const item = ref();
 const addSuccessFlag = ref('init');
 
 const fetchItems = async () => {
-  list.value = await getIndex(testApi)
+  list.value = await getIndex(fruitApi)
 }
 
 const fetchItem = async () => {
-  item.value = await getDetail(testApi, 1);
+  item.value = await getDetail(fruitApi, 1);
 }
 
 const addItem = async () => {
   const data = {name: "Viet"};
-  if(await postData(testApi, data) === 200){
+  if(await postData(fruitApi, data) === 200){
     addSuccessFlag.value = 'Success'
   }
   else alert('Post Failed!');
