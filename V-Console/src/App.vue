@@ -1,24 +1,7 @@
 <template>
   <a-layout class="layout">
-    <a-layout-header>
-      <div class="logo" />
-      <a-menu
-        v-model:selectedKeys="selectedKeys"
-        theme="dark"
-        mode="horizontal"
-        :style="{ lineHeight: '64px' }"
-      >
-        <a-menu-item key="1">nav 1</a-menu-item>
-        <a-menu-item key="2">nav 2</a-menu-item>
-        <a-menu-item key="3">nav 3</a-menu-item>
-      </a-menu>
-    </a-layout-header>
-    <a-layout-content style="padding: 0 50px">
-      <a-breadcrumb style="margin: 16px 0">
-        <a-breadcrumb-item>Home</a-breadcrumb-item>
-        <a-breadcrumb-item>List</a-breadcrumb-item>
-        <a-breadcrumb-item>App</a-breadcrumb-item>
-      </a-breadcrumb>
+   <VHeader/>
+    <a-layout-content style="padding: 50px 50px">
       <div :style="{ background: '#fff', padding: '24px', minHeight: '280px' }"> {{ list }}</div>
       <span> {{ item }} </span>
     </a-layout-content>
@@ -55,10 +38,11 @@
 
 import { onMounted, ref, watch } from 'vue'
 import { getDetail, getIndex, postData, fruitApi } from '@/RestApi'
+import VHeader from '@/components/VHeader'
 
 const list = ref([]);
 const item = ref();
-const addSuccessFlag = ref('init');
+const addSuccessFlag = ref(0);
 
 const fetchItems = async () => {
   list.value = await getIndex(fruitApi)
@@ -69,9 +53,9 @@ const fetchItem = async () => {
 }
 
 const addItem = async () => {
-  const data = {name: "Viet"};
+  const data = {name: "Viet", type: 0, season:"Full", amount: 20};
   if(await postData(fruitApi, data) === 200){
-    addSuccessFlag.value = 'Success'
+    addSuccessFlag.value = 1
   }
   else alert('Post Failed!');
 }
@@ -81,7 +65,8 @@ onMounted(() => {
 })
 
 watch(() => addSuccessFlag.value, effect => {
-  if(effect === 'Success') {
+  if(effect > 0) {
+    addSuccessFlag.value = 0
     fetchItems()
   }
 })
