@@ -2,18 +2,18 @@ version: "3"
 
 services:
   v-proxy:
-    image: nginx
+    build: ./proxy
+    image: v-proxy
     container_name: v-proxy
-    restart: always
+    networks:
+      v-net:
+        ipv4_address: 172.14.1.2
     ports:
       - "80:80"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./proxy/vhost.d:/etc/nginx/vhost.d
       - ./proxy/conf.d/custom.conf:/etc/nginx/conf.d/custom.conf
-      - ./proxy/conf.d:/etc/nginx/conf.d
-    networks:
-      v-net:
-        ipv4_address: 172.14.1.2
 
   v-mysql:
     image: mysql:5.7
@@ -51,20 +51,20 @@ services:
     build: ../V-Laravel-Api
     image: v-laravel-api
     container_name: v-laravel-api
-#    depends_on:
-#      v-mysql:
-#        condition: service_healthy
+    depends_on:
+      v-mysql:
+        condition: service_healthy
     networks:
       v-net:
         ipv4_address: 172.14.1.4
     volumes:
       - ../V-Laravel-Api:/var/www/html
+      - ./supervisor/conf.d/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
+      - ./supervisor/conf.d/laravel-worker.conf:/etc/supervisor/conf.d/laravel-worker.conf
+      - ./php/laravel.ini:/usr/local/etc/php/conf.d/laravel.ini
+      - ./php/swoole.ini:/usr/local/etc/php/conf.d/swoole.ini
     hostname: api
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: Fruit
-      MYSQL_PASSWORD: 123456
-      PMA_HOST: v-mysql
       APP_ENV: local
       VIRTUAL_HOST: v-api.local
 
@@ -77,6 +77,7 @@ services:
         ipv4_address: 172.14.1.6
     volumes:
       - ../V-Console:/app
+      - ./supervisor/conf.d/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
       - ./supervisor/conf.d/vue-worker.conf:/etc/supervisor/conf.d/vue-worker.conf
     hostname: console
     environment:
