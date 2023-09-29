@@ -3,5 +3,5 @@
 # Install packages
 yarn install
 
-# yarn serve
-yarn serve
+# Start
+supervisord

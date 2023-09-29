@@ -1,23 +1,19 @@
-# Choose the Image which has Node installed already
-FROM node:lts-alpine
+FROM ubuntu:18.04
 
-# install simple http server for serving static content
-RUN npm install -g http-server
+RUN apt update
 
-# make the 'app' folder the current working directory
-WORKDIR /app
+# Install supervisor
+RUN apt install -y supervisor
 
-# copy both 'package.json' and 'package-lock.json' (if available)
-COPY package*.json ./
+# Install node & npm & vue-cli
+RUN apt install -y curl
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
+RUN apt install -y nodejs
+RUN npm i -g npm@8.18.0 yarn@1.22.19 @vue/cli-service@4.5.19
 
-# install project dependencies
-RUN npm install
-
-# copy project files and folders to the current working directory (i.e. 'app' folder)
-COPY . .
-
-# build app for production with minification
-RUN npm run build
+# Cleanup
+RUN apt-get clean
+RUN rm -rf /var/lib/apt/lists/*
 
 ENV WORKDIR=/app
 ENV TZ=Asia/Ho_Chi_Minh
